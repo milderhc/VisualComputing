@@ -17,7 +17,9 @@ function setup ( ) {
 
 
 function draw ( ) {
-    var g = saturationSlider.value();
+    var h = hueSlider.value();
+    var s = saturationSlider.value();
+    var b = saturationSlider.value();
     text("Hue", 165, pickerSize + 35);
     text("Saturation", 165, pickerSize + 65);
     text("Brightness", 165, pickerSize + 95);
@@ -26,7 +28,7 @@ function draw ( ) {
     colorMode(HSB, pickerSize);
     for (i = 0; i < pickerSize; i++) {
         for (j = 0; j < pickerSize; j++) {
-            stroke(i, j, g);
+            stroke(i, j, b);
             point(i, j);
         }
     }
