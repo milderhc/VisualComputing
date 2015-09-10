@@ -1,3 +1,8 @@
+/*
+  Size Circle
+  @author: Maikol Bonilla
+*/
+
 function  setup(){
   createCanvas(600,300);
 }
@@ -9,13 +14,15 @@ function draw(){
   background(255,255,255);
   strokeWeight(2);
   
-  fill(0,0,255);
-  stroke(0,0,255);
+  /*Se crean dos circulos del mismo tamano*/
+  fill(0,0,0);
   ellipse(150,150,40,40);
   ellipse(450,150,40,40);
   
+  /*El primer circulo se rodea con circulos mas grandes*/
+  /*El segundo circulo se rodea con circulos mas pequeños*/
   if(x == false){
-    fill(0,0,0);
+    noFill();
     stroke(0,0,0);
     ellipse(150,110,30,30);
     ellipse(150,190,30,30);

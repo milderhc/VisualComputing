@@ -1,4 +1,10 @@
 
+/*
+  Gray To Blue
+  @author: Maikol Bonilla Gil
+  @reference: https://www.youtube.com/watch?v=M7-z_ZRcKEE
+*/
+
 var t = 255;
 
 function setup(){
@@ -11,8 +17,8 @@ function setup(){
 function draw(){
 
 	background(141,139,141);
-	//frameRate(10000);
 
+	/*Se crea el rectangulo naraja*/
 	strokeWeight(15);
 	fill(255,125,0);
 	rect(-15,-15,250,300);
@@ -23,12 +29,15 @@ function draw(){
 		dark_light = light_dark; 
 	}
 
+	/*Esta sentencia se ejecuta mientras el rectangulo gris aun tenga transparencia*/
 	if(t == 255){
 		do{
 			light_dark = parseInt(random(0, 200));
 		}while(abs(light_dark-dark_light)<= 50);
 	}
 
+	/*Se crean los rectangulos que estan cambiando la transparencia*/
+	/*A me dida que uno se va volviendo mas transparente el otro se va oscureciendo*/
 	noStroke();
 	fill(141,139,141,t);
 	rect(0,dark_light,228,50);

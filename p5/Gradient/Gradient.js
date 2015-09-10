@@ -1,6 +1,7 @@
 
 /*
-	http://www.openprocessing.org/sketch/168577
+  Gradient
+  @reference: http://www.openprocessing.org/sketch/168577
 */
 
 function setup() {
