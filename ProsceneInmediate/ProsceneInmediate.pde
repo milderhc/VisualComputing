@@ -35,11 +35,19 @@ import remixlab.bias.core.*;
 import remixlab.bias.event.*;
 import java.util.*;
 import processing.core.PShape;
-Scene scene;
+
+PFont f = createFont("Century Gothic",11,true); // Arial, 16 point, anti-aliasing on
+ArrayList<Ball> balls;
+final int ballWidth = 1;
+boolean pressed = false;
+
+PShape shape;
+Scene scene, auxScene;
+PGraphics canvas, auxCanvas;  
+
 ArrayList buttons;
 int h;
 PFont buttonFont;
-
 
 int X[],Y[],Z[],SZ;
 
@@ -74,11 +82,24 @@ void setupBoxes(int T, int sz){
    }
 }
 
+void setupChart(){
+  // Create an empty ArrayList
+  balls = new  ArrayList();
+  for (int i=0; i < 170; i++) {
+    balls.add(new Ball(0, 20, 0, color ( 0, 0, 0)));
+  }
+}
 
 void setup() {
   size(640, 360, P3D);
-  scene = new Scene(this);
-  setupBoxes(10000,10);
+  
+  canvas = createGraphics(640, 360, P3D);
+  scene = new Scene(this, canvas);
+  setupBoxes(1000,10);
+  scene.showAll();
+  scene.setPathsVisualHint(true);
+  
+  setupChart();
 
   //create a camera path and add some key frames:
   //key frames can be added at runtime with keys [j..n]
@@ -93,11 +114,6 @@ void setup() {
     scene.camera().lookAt( scene.camera().sceneCenter() );
     scene.camera().addKeyFrameToPath(1);
   }
-  
-  scene.showAll();
-
-  //drawing of camera paths are toggled with key 'r'.
-  scene.setPathsVisualHint(true);
 
   buttons = new ArrayList(6);
   for (int i=0; i<5; ++i)
@@ -109,13 +125,13 @@ void setup() {
   h = button.myHeight;
   buttons.set(0, button);
 }
+
 void drawBlock(int x, int y, int z,  int xSz, int ySz, int zSz){
-  pushMatrix();
-  translate(x+xSz/2,y+ySz/2,z-zSz/2);
-  box(xSz, ySz, zSz);
-  popMatrix();
-  
-  
+  canvas.pushMatrix();
+  //canvas.translate(x+xSz/2,y+ySz/2,z-zSz/2);
+  //canvas.box(xSz, ySz, zSz);
+  canvas.box(x,y,z);
+  canvas.popMatrix();
 }
 
 void drawBoxes(){
@@ -124,16 +140,60 @@ void drawBoxes(){
    }
 }
 
+void drawChart(){
+
+  fill(0);
+  noStroke();
+  rect(435, 200, 200, 150);
+  
+  fill(255);
+  stroke(255,255,255);
+  line(460, 331, 630, 331); //Y
+  line(630, 329, 630, 333);
+  
+  line(459, 331, 459, 205); //X
+  
+  for(int i = 0; i < 100; i += 10){
+    line(457, 205+map(i,0,100,0,126), 461, 205+map(i,0,100,0,126));
+  }
+  
+  textFont(f,11);
+  text("Camera Time",505,343);
+  pushMatrix();
+  rotate(-HALF_PI);
+  text("Frame Rate",-305,455);
+  popMatrix();
+  text("0",450, 340);
+  text("100",437,210); 
+ 
+  println(frameRate);
+  Ball ball;
+  balls.add(new Ball(0, map(100-frameRate, 0, 100, 205, 330), ballWidth, color (204, 102, 0, 150)));
+  for (int i=0; i < balls.size(); i++) {
+    ball = balls.get(i);
+    ball.display(460+i);
+  }
+  if (balls.size()>0)
+    balls.remove(0);      
+  
+}
+
 
 void draw() {
-  background(0);
-  fill(204, 102, 0, 150);
-  //scene.drawTorusSolenoid();  
-  //drawBlock(0,0,0,10,10,10);
+  
+  canvas.beginDraw();
+  scene.beginDraw();
+  canvas.background(0);
+  canvas.fill(204, 102, 0, 150);
   drawBoxes();
   updateButtons();
   displayButtons();
-  println(frameRate);
+  scene.endDraw();
+  canvas.endDraw();
+  
+  image(canvas, 0, 0);
+    
+  drawChart();
 }
 
 void updateButtons() {
@@ -147,6 +207,17 @@ void updateButtons() {
   }
 }
 
+void updateButtons2() {
+  for (int i = 1; i < buttons.size(); i++) {
+    // Check if CameraPathPlayer is still valid
+    if ((buttons.get(i) != null) && (auxScene.camera().keyFrameInterpolator(i) == null ) )
+      buttons.set(i, null);
+    // Or add it if needed
+    if ((auxScene.camera().keyFrameInterpolator(i) != null) && (buttons.get(i) == null))
+      buttons.set(i, new ClickButton(auxScene, new PVector(10, + ( i ) * ( h + 7 )), buttonFont, i));
+  }
+}
+
 void displayButtons() {
   for (int i = 0; i < buttons.size(); i++) {
     Button2D button = (Button2D) buttons.get(i);
@@ -154,3 +225,26 @@ void displayButtons() {
       button.display();
   }
 }
+
+// =====================================================================
+// Simple ball class
+class Ball {
+  float x;
+  float y;
+  color myColor;
+  float w;
+  Ball(float tempX, float tempY, float tempW, color tempmyColor1) {
+    x = tempX;
+    y = tempY;
+    w = tempW;
+    myColor=tempmyColor1;
+  }
+  void display(float i) {
+    // Display the ball
+    fill(myColor);
+    stroke(myColor);
+    ellipse(i, y, w, w);
+    point(i, y);
+  }
+} 
+// =====================================================

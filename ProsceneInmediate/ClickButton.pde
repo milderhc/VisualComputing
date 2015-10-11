@@ -21,6 +21,7 @@ public class ClickButton extends Button2D {
   }
 
   public void display() {
+    
     String text = new String();
     if (path == 0)
       if (scene.pathsVisualHint())
@@ -46,5 +47,6 @@ public class ClickButton extends Button2D {
     }
     setText(text);
     super.display();
+    
   }
 }
