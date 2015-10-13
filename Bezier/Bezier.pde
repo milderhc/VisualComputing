@@ -2,7 +2,7 @@
 import remixlab.proscene.*;
 
 Scene scene;
-InteractiveFrame interactiveFrame;
+
 
 boolean entra = false;
 float t=0;
