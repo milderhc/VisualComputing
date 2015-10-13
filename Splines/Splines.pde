@@ -27,7 +27,7 @@ float p_leave[] = {0, 0, 5, 15, 15};
 float z_leave[] = {80, 80, 95, 105, 105};
 float PHI_LEAVE = 3.1416;
 
-float DENSITY = 0.05;
+float DENSITY = 0.004;
 float SIZE = 1;
 
 void draw ( ) {
