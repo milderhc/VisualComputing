@@ -138,6 +138,7 @@ void setup() {
   Button2D button = new ClickButton(scene, new PVector(10,5), buttonFont, 0);
   h = button.myHeight;
   buttons.set(0, button);
+  frameRate(200);
 }
 
 void drawBlock(int x, int y, int z,  int xSz, int ySz, int zSz){
