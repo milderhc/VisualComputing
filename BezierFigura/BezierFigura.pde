@@ -45,23 +45,23 @@ void setup() {
 
   //create a camera path and add some key frames:
   //key frames can be added at runtime with keys [j..n]
-  scene.camera().setPosition(80,0,0);
+  scene.camera().setPosition(120,0,0);
   scene.camera().lookAt( scene.camera().sceneCenter() );
   scene.camera().addKeyFrameToPath(1);
 
-  scene.camera().setPosition(30,30,80);
+  scene.camera().setPosition(50,50,120);
   scene.camera().lookAt( scene.camera().sceneCenter() );
   scene.camera().addKeyFrameToPath(1);
 
-  scene.camera().setPosition(-30,-30,80);
+  scene.camera().setPosition(-50,-50,130);
   scene.camera().lookAt( scene.camera().sceneCenter() );
   scene.camera().addKeyFrameToPath(1);
 
-  scene.camera().setPosition(-80,0,0);
+  scene.camera().setPosition(-80,10,10);
   scene.camera().lookAt( scene.camera().sceneCenter() );
   scene.camera().addKeyFrameToPath(1);
   
-  for(int i= 0; i <= 100; i+=40){
+  for(int i= 40; i <= 140; i+=40){
       scene.camera().setPosition(-i,i*2,i);
       scene.camera().lookAt( scene.camera().sceneCenter() );
       scene.camera().addKeyFrameToPath(1);
@@ -90,6 +90,8 @@ void setup() {
 void draw() {
   background(0);
 
+  if(keyPressed && key == '2') tam++;
+  if(keyPressed && key == '3') tam--;
   //for(int j = 0; j <= 5; j++){
      // translate(0,0,-10);
          for(int x = 0; x <= 360; x++){

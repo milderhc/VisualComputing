@@ -65,7 +65,7 @@ void draw(){
   background(255);
   
   
-  float xd = 1;
+  float xd =2;
   if( keyPressed && key == '2' )
     xd += 0.5;
   
