@@ -37,7 +37,42 @@ ArrayList buttons;
 float h;
 PFont buttonFont;
 
-int tam = 100;
+float tam = 100;
+
+class Point{
+  
+  float x,y,z;
+  
+  public Point(float x, float y, float z){
+    this.x = x;
+    this.y = y;
+    this.z = z;
+  }
+  
+  public Point add( Point p ){
+    return new Point(x+p.x, y+p.y, z+p.z);
+  }
+  
+  public Point mult( float m ){
+    return new Point(x*m , y*m, z*m);
+  }
+  
+}
+
+void bezierCurve(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4){
+
+  Point P0 = new Point(x1, y1, z1);
+  Point P1 = new Point(x2, y2, z2);
+  Point P2 = new Point(x3, y3, z3);
+  Point P3 = new Point(x4, y4, z4);
+  
+  strokeWeight(2);
+  for(float t = 0.0; t<=1; t+=0.01){
+      Point B = P0.mult(pow((1 - t),3)).add(P1.mult(3.0 * t * pow((1 - t),2))).add(P2.mult(3.0 * pow(t, 2) * (1 - t))).add(P3.mult(pow(t,3)));
+      point(B.x, B.y, B.z);
+  }
+  
+}
 
 void setup() {
   size(640, 360, P3D);
@@ -92,22 +127,19 @@ void draw() {
 
   if(keyPressed && key == '2') tam++;
   if(keyPressed && key == '3') tam--;
-  //for(int j = 0; j <= 5; j++){
-     // translate(0,0,-10);
+
          for(int x = 0; x <= 360; x++){
            noStroke();
            rotate(1);
            stroke(255,255,255);
            strokeCap(ROUND);
-           //strokeWeight(x);
-           line(0, 0, tam ,0, 0, 0);
+           //line(0, 0, tam ,0, 0, 0);
            line(0, 0, 0, tam, tam, 0);
            noFill();
            stroke(0,130,255);
-           bezier(0, 0, tam ,0, 0, 0,
+           bezierCurve(0, 0, tam ,0, 0, 0,
                      0, 0, 0, tam, tam, 0);  
          }
-   //}
 
   updateButtons();
   displayButtons();
