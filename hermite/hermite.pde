@@ -34,10 +34,26 @@ class Point{
 
 boolean entra = false;
 
+Point p1, p4, r1, r4, all[];
+float delta;
+int current;
+
 void setup(){
   size(640, 720, P3D);
   scene = new Scene(this);
   //scene.setVisualHints( Scene.PICKING );
+  
+  p1 = new Point(0,0,0);
+  p4 = new Point(100,100,0);
+  r1 = new Point(5,5,5).sub(p1); // vectores
+  r4 = new Point(350,150,100).sub(p4); // vectores
+  delta = 0.1;
+  all = new Point[4];
+  all[0] = p1;
+  all[1] = r1;
+  all[2] = p4;
+  all[3] = r4;  
+  current = 0;
   scene.showAll();
   
 }
@@ -55,32 +71,56 @@ Point formula( Point p1,Point p4, Point r1, Point r4, float t ){
 
 void drawHermiteLine(Point p1,Point p4, Point r1, Point r4){
     for(float t = 0.0; t<=1; t+=0.001){
-     Point aux = formula(p1,p4,r1,r4,t);
+     Point aux = formula(p1,p4,r1,r4,t);  
      point( aux.x, aux.y , aux.z );
   }
+}
+
+void keyEvents(){
+  if(  keyPressed && key == 'x' ){
+    current = (current+1) % 4;
+    println("Cambiado a " + current);
+  }
+  
+  if( keyPressed && key == 'z' ){
+    current--;
+    if( current < 0 ) current = 3;
+    println("Cambiado a " + current);
+  }
+  
+  if( keyPressed && key == 'q' ){
+    all[current].x += delta;
+  }
+  
+  if( keyPressed && key == 'a' ){
+    all[current].x -= delta;
+  }
+  
+  if( keyPressed && key == 'w' ){
+    all[current].y += delta;
+  }
+  
+  if( keyPressed && key == 's' ){
+    all[current].y -= delta;
+  }
+  
+  if( keyPressed && key == 'e' ){
+    all[current].z += delta;
+  }
+  
+  if( keyPressed && key == 'd' ){
+    all[current].z -= delta;
+  }
+  
+  
 }
 
 void draw(){
   
   background(255);
+  keyEvents();
+  drawHermiteLine(p1,p4,r1,r4);
   
-  
-  float xd =2;
-  if( keyPressed && key == '2' )
-    xd += 0.5;
-  
-  if( keyPressed && key == '3' )
-    xd -= 0.5;
-  
-  
-  Random rand = new Random();
-  for(float i=0; i<=50; i+=xd){
-    Point p1 = new Point(i,0,i);
-    Point p4 = new Point(100,100,i);
-    Point r1 = new Point(5,5,5).sub(p1); // vectores
-    Point r4 = new Point(350,150,100).sub(p4); // vectores
-    drawHermiteLine(p1,p4,r1,r4);
-  }
   
   
 }
