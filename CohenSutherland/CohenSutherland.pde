@@ -1,5 +1,5 @@
 /*
- * Coher Sutherland algorithm 
+ * Cohen Sutherland algorithm 
  */
 
 
