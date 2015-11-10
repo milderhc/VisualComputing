@@ -2,7 +2,7 @@ import java.awt.Color;
 
 PFont font;
 PGraphics canvas1, canvas2;
-String renderer = P2D;
+String renderer = P3D;
 
 int w = 640;
 int h = 720;
@@ -48,8 +48,8 @@ class Robot {
       
       pg.pushMatrix();
       pg.stroke(255);
-      pg.translate(p.translateX, p.translateY);
-      pg.rotate(p.rotate);
+      translate(pg,p.translateX, p.translateY);
+      rotate(pg,p.rotate);
       pg.fill(p.c.getRed(), p.c.getGreen(), p.c.getBlue());
       
       pg.beginShape();
@@ -119,7 +119,35 @@ void setup() {
 }
 
 
+public void scale(PGraphics pg, float f){
+  pg.applyMatrix( f, 0.0, 0.0,  0.0,
+                       0.0, f, 0.0,  0.0,
+                       0.0, 0.0,  f,  0.0,
+                       0.0, 0.0, 0.0,  1.0); 
+}
+
+public void rotate(PGraphics pg, float f){
+  float ct = cos(f);
+  float st = sin(f);    
+  pg.applyMatrix( ct, -st, 0.0,  0.0,
+                       st, ct, 0.0,  0.0,
+                       0.0, 0.0,  1.0,  0.0,
+                       0.0, 0.0, 0.0,  1.0);
+}
+
+public void translate(PGraphics pg, float x, float y){
+   pg.applyMatrix( 1.0, 0.0, 0.0,  x,
+                   0.0, 1.0, 0.0,  y,
+                   0.0, 0.0, 1.0,  1.0,
+                   0.0, 0.0, 0.0,  1.0); 
+}
+
+
+
 public void draw() {
+  
+  //########################     Canvas1     ############################################
+  
   background(255);
   canvas1.beginDraw();
   
@@ -128,45 +156,37 @@ public void draw() {
   
   robot.draw(canvas1);
   
-  
-  
-  
   canvas1.noFill(); //Draws the border
   canvas1.stroke(255,0,0); //Sets the color of the border
-  
-  
-  canvas1.translate(canvas1.width/2,canvas1.height/2);
-  canvas1.scale(1/scaleFactor);
-  canvas1.rotate(rotateFactor*TWO_PI/360);
-  canvas1.translate(-canvas1.width/2,-canvas1.height/2);
-  canvas1.rect(0, 0, canvas1.width-1, canvas1.height-1); //Draws the border
+  translate(canvas1,canvas1.width/2,canvas1.height/2);
+  scale(canvas1,1/scaleFactor); //Scales acording user preferences
+  rotate(canvas1,rotateFactor*TWO_PI/360); //Rotates acording user preferences
+  translate(canvas1,-canvas1.width/2,-canvas1.height/2);
+  canvas1.rect(2, 2, canvas1.width-5, canvas1.height-5); //Draws the border, losing precision?
   canvas1.popMatrix();
-  
-  
-  
   canvas1.endDraw();
   image(canvas1, 0, 0);
   
-  
+  //########################     Canvas2     ############################################
   
   canvas2.beginDraw();
   canvas2.background(255);
   canvas2.pushMatrix();
   
-  canvas2.translate(canvas2.width/2, canvas2.height/2);
-  canvas2.scale(scaleFactor);
-  canvas2.rotate(rotateFactor*TWO_PI/360);
-  canvas2.translate(-canvas2.width/2, -canvas2.height/2);
+  translate(canvas2,canvas2.width/2, canvas2.height/2); 
+  scale(canvas2,scaleFactor); //Scales acording user preferences
+  rotate(canvas2,rotateFactor*TWO_PI/360); //Rotates acording user preferences
+  translate(canvas2,-canvas2.width/2, -canvas2.height/2);
+  
   robot.draw(canvas2);
+  
   canvas2.popMatrix();
   canvas2.noFill(); //Draws the border
   canvas2.stroke(0,0,0); //Sets the color of the border
   canvas2.rect(0, 0, canvas2.width-1, canvas2.height-1); //Draws the border
   canvas2.endDraw();
   image(canvas2, 0, 360);
-  translate(0,0);
-  
-  
+  translate(0,0);  
 }
 
 void keyPressed() {

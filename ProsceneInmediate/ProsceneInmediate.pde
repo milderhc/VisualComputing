@@ -96,7 +96,7 @@ void setup() {
   
   canvas = createGraphics(640, 360, P3D);
   scene = new Scene(this, canvas);
-  setupBoxes(1000,10);
+  setupBoxes(3000,10);
   scene.showAll();
   scene.setPathsVisualHint(true);
   
@@ -130,9 +130,9 @@ void setup() {
 
 void drawBlock(int x, int y, int z,  int xSz, int ySz, int zSz){
   canvas.pushMatrix();
-  //canvas.translate(x+xSz/2,y+ySz/2,z-zSz/2);
-  //canvas.box(xSz, ySz, zSz);
-  canvas.box(x,y,z);
+  canvas.translate(x+xSz/2,y+ySz/2,z-zSz/2);
+  canvas.box(xSz, ySz, zSz);
+  //canvas.box(x,y,z);
   canvas.popMatrix();
 }
 

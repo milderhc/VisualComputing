@@ -80,7 +80,7 @@ void setup() {
 
   //create a camera path and add some key frames:
   //key frames can be added at runtime with keys [j..n]
-  scene.camera().setPosition(120,0,0);
+    scene.camera().setPosition(120,0,0);
   scene.camera().lookAt( scene.camera().sceneCenter() );
   scene.camera().addKeyFrameToPath(1);
 

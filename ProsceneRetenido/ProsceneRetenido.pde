@@ -40,9 +40,10 @@ PFont f = createFont("Century Gothic",11,true); // Arial, 16 point, anti-aliasin
 ArrayList<Ball> balls;
 final int ballWidth = 1;
 boolean pressed = false;
-int T = 1000;
+int T = 3000;
 
 PShape[] shape = new PShape[T];
+PShape group;
 Scene scene;
 PGraphics canvas; 
 
@@ -82,10 +83,12 @@ void setupBoxes(int sz){
      Y[i] = randInt(-200,200);
      Z[i] =  randInt(-200,200);
      
-     shape[i] = createShape(BOX, X[i], Y[i], Z[i]);
-     //shape[i] = createShape(BOX, sz, sz, sz); 
-     //shape[i].translate(X[i]+SZ/2,Y[i]+SZ/2,Z[i]-SZ/2);
- 
+     //shape[i] = createShape(BOX, X[i], Y[i], Z[i]);
+     
+     shape[i] = createShape(BOX, sz, sz, sz); 
+     shape[i].translate(X[i]+SZ/2,Y[i]+SZ/2,Z[i]-SZ/2);
+     group.addChild(shape[i]);
+     
    }
   
 }
@@ -104,6 +107,7 @@ void setup() {
   
   canvas = createGraphics(640, 360, P3D);
   scene = new Scene(this, canvas);
+  group = createShape(GROUP);
   setupBoxes(10);
   scene.showAll();
   scene.setPathsVisualHint(true);
@@ -200,9 +204,9 @@ void draw() {
   canvas.beginDraw();
   scene.beginDraw();
   canvas.background(0);
-  for(int i=0; i<T; i++){
-    canvas.shape(shape[i],0,0);
-  }
+  
+  canvas.shape(group);
+  
   updateButtons();
   displayButtons();
   scene.endDraw();
