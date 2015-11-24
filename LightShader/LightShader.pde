@@ -1,3 +1,9 @@
+import remixlab.proscene.*;
+import remixlab.dandelion.geom.*;
+
+Scene scene;
+InteractiveFrame iFrame;
+
 PShape can;
 float angle;
 
@@ -5,13 +11,19 @@ PShader lightShader;
 
 void setup() {
   size(640, 360, P3D);
+  scene = new Scene(this); 
+  iFrame = new InteractiveFrame(scene);
+  iFrame.setGrabsInputThreshold(scene.radius()/3, true); //Radio de captura
+  iFrame.translate(0, 0, 100);
+  scene.setNonSeqTimers(); // comment it to use sequential timers instead (default)
   can = createCan(100, 200, 32);
   lightShader = loadShader("lightFrag.glsl", "lightVert.glsl");
+  //lightShader.set("myColor", 255, 255, 255);
 }
 
 void draw() {    
   background(0);
-  
+   
   if(keyPressed && key == '1' ){
     lightShader = loadShader("AutoluminosoFrag.glsl", "lightVert.glsl");
   }
@@ -25,14 +37,52 @@ void draw() {
     lightShader = loadShader("EspecularFrag.glsl", "lightVert.glsl");
   }
   
+  pushMatrix();
   shader(lightShader);
-  pointLight(255, 255, 255, width/2, height, 200);
+  //pointLight(255, 255, 255, width/2, height, 200);
+  pointLight(255, 255, 255, 0, 0, 0);
 
-  translate(width/2, height/2);
-  rotateY(angle);  
+  translate(0, 0, -100);
+  //rotateY(angle);  
   shape(can);  
-  angle += 0.01;
+  //angle += 0.01;
+  
+  popMatrix();
+  
+  
+  // Save the current model view matrix
+  pushMatrix();
+ 
+  // Multiply matrix to get in the frame coordinate system.
+  // applyMatrix(Scene.toPMatrix(iFrame.matrix())); //is possible but inefficient
+  iFrame.applyTransformation();//very efficient
+  // Draw an axis using the Scene static function
+  //scene.drawAxes(20);
+  noLights( );
+
+  // Draw a second torus
+  if (scene.motionAgent().defaultGrabber() == iFrame) {
+    noStroke();
+    fill(0, 255, 255);
+    sphere(16);
+  }
+  else if (iFrame.grabsInput()) {
+    noStroke();
+    fill(255, 0, 0);
+    sphere(16);
+  }
+  else {
+    noStroke();
+    fill(255, 255, 255);
+    sphere(16);
+  }
+  
+  lightShader.set("myLightPosition", iFrame.position().x(),  iFrame.position().y(), iFrame.position().z());
+
+  popMatrix();
+
 }
+
 
 PShape createCan(float r, float h, int detail) {
   textureMode(NORMAL);

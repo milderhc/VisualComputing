@@ -5,6 +5,7 @@ uniform mat4 transform;
 uniform mat3 normalMatrix;
 
 uniform vec4 lightPosition;
+uniform vec3 myLightPosition;
 
 uniform vec3 lightAmbient;
 uniform vec3 lightDiffuse;
@@ -27,7 +28,7 @@ void main() {
   N = ecNormal;
   vec3 observadorPos = vec3(10, 10, 10);
   V = observadorPos;
-  vec3 direction = normalize(lightAmbient.xyz - ecVertex);
+  vec3 direction = normalize(myLightPosition.xyz - ecVertex);
   L = direction;    
   float intensity = max(0.0, dot(direction, ecNormal));
   I = vec4(intensity, intensity, intensity, 1);

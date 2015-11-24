@@ -20,19 +20,19 @@ void main() {
   	float K_a = 0.5;
   	gl_FragColor = I * K_a * S;
   	*/
-  	
+  	/*
   	//DIFUSA
   	float K_a = 0.5;
   	float K_d = 0.5;
   	gl_FragColor = (I * K_a * S) + (I * K_d * S *  dot(normalize(N),normalize(L)));
+  	*/
   	
-  	/*
   	//ESPECULAR
   	float K_a = 0.5;
   	float K_d = 0.5;
   	float K_s = 0.5;
   	vec3 R = dot(2 * normalize(N), normalize(L)) * N - L;
   	gl_FragColor = (I * K_a * S) + (I * K_d * S *  dot(normalize(N),normalize(L))) + (I * K_s * dot(normalize(V),R)); 
-  	*/
+  	
 
 }
