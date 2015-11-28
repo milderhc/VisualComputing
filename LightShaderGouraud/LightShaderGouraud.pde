@@ -3,6 +3,7 @@ import remixlab.dandelion.geom.*;
 
 Scene scene;
 InteractiveFrame iFrame;
+Vec ecLight;
 
 PShape can;
 float angle;
@@ -14,27 +15,26 @@ void setup() {
   scene = new Scene(this); 
   iFrame = new InteractiveFrame(scene);
   iFrame.setGrabsInputThreshold(scene.radius()/3, true); //Radio de captura
-  iFrame.translate(0, 0, 100);
+  iFrame.translate(0, 0, 40);
   scene.setNonSeqTimers(); // comment it to use sequential timers instead (default)
   can = createCan(100, 200, 32);
   lightShader = loadShader("lightFrag.glsl", "lightVert.glsl");
-  //lightShader.set("myColor", 255, 255, 255);
 }
 
 void draw() {    
   background(0);
-   
+     
   if(keyPressed && key == '1' ){
-    lightShader = loadShader("AutoluminosoFrag.glsl", "lightVert.glsl");
+    lightShader = loadShader("lightFrag.glsl", "AutoluminosoVert.glsl");
   }
   if(keyPressed && key == '2' ){
-    lightShader = loadShader("AmbientalFrag.glsl", "lightVert.glsl");
+    lightShader = loadShader("lightFrag.glsl", "AmbientalVert.glsl");
   }
   if(keyPressed && key == '3' ){
-    lightShader = loadShader("DifusaFrag.glsl", "lightVert.glsl");
+    lightShader = loadShader("lightFrag.glsl", "DifusaVert.glsl");
   }
   if(keyPressed && key == '4' ){
-    lightShader = loadShader("EspecularFrag.glsl", "lightVert.glsl");
+    lightShader = loadShader("lightFrag.glsl", "EspecularVert.glsl");
   }
   
   pushMatrix();
@@ -43,9 +43,9 @@ void draw() {
   pointLight(255, 255, 255, 0, 0, 0);
 
   translate(0, 0, -100);
-  //rotateY(angle);  
+  rotateY(angle);  
   shape(can);  
-  //angle += 0.01;
+  angle += 0.01;
   
   popMatrix();
   
@@ -68,7 +68,7 @@ void draw() {
   }
   else if (iFrame.grabsInput()) {
     noStroke();
-    fill(255, 0, 0);
+    fill(0, 0, 255);
     sphere(16);
   }
   else {
@@ -77,7 +77,8 @@ void draw() {
     sphere(16);
   }
   
-  lightShader.set("myLightPosition", iFrame.position().x(),  iFrame.position().y(), iFrame.position().z());
+  ecLight = scene.eye().frame().transformOf(iFrame.position()); //Pasa a las coordenadas de la camara
+  lightShader.set("myLightPosition", ecLight.x(),  ecLight.y(), ecLight.z());
 
   popMatrix();
 
@@ -89,6 +90,7 @@ PShape createCan(float r, float h, int detail) {
   PShape sh = createShape();
   sh.beginShape(QUAD_STRIP);
   sh.noStroke();
+  sh.fill(80,208,218);
   for (int i = 0; i <= detail; i++) {
     float angle = TWO_PI / detail;
     float x = sin(i * angle);

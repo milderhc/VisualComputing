@@ -3,17 +3,19 @@ precision mediump float;
 precision mediump int;
 #endif
 
-varying vec4 I;
+vec4 Ia;
+vec4 Ip;
+vec4 Ie;
+
 varying vec4 S;
+varying vec3 La;
 varying vec3 L;
 varying vec3 N;
 varying vec3 V;
 
 void main() {
 	
-  	//DIFUSA
-  	float K_a = 0.5;
-  	float K_d = 0.5;
-  	gl_FragColor = (I * K_a * S) + (I * K_d * S *  dot(normalize(N),normalize(L)));
+	//AUTOLUMINOSO
+	gl_FragColor = S;
 
 }
